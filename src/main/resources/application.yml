@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: spring-oracle
+    name: spring-ecommerce
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher
@@ -16,6 +16,8 @@ spring:
     database: oracle
     show-sql: false
     format_sql: true
+    hibernate:
+      ddl-auto: update
   datasource:
     url: ${properties.jpa.database.url}
     username: ${properties.dbUserName}
