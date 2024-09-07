@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: spring-oracle
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+  jpa:
+    properties:
+      hibernate:
+        dialect: ${properties.jpa.hibernate.dialet}
+        default_schema: SPRINGBOOT
+    generate-ddl: true
+    database: oracle
+    show-sql: false
+    format_sql: true
+  datasource:
+    url: ${properties.jpa.database.url}
+    username: ${properties.dbUserName}
+    password: ${properties.dbPassword}
+    driver-class-name: ${properties.orcDriverClassInfo}
+    tomcat:
+      initial-size: 15
+      max-idle: 15
+      min-idle: 2
+      default-auto-commit: true
+      test-while-idle: true
+      time-between-eviction-runs-millis: 5000
+      min-evictable-idle-time-millis: 6000
