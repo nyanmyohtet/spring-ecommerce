@@ -1,5 +1,6 @@
 package com.nyanmyohtet.ecommerceservice.api.rest;
 
+import com.nyanmyohtet.ecommerceservice.dto.AddProductToCartDto;
 import com.nyanmyohtet.ecommerceservice.model.Cart;
 import com.nyanmyohtet.ecommerceservice.model.CartItem;
 import com.nyanmyohtet.ecommerceservice.service.CartService;
@@ -25,11 +26,11 @@ public class CartRestController {
 
     // Add a product to the cart for a specific user
     @PostMapping("/{userId}/add")
-    public ResponseEntity<CartItem> addProductToCart(
+    public ResponseEntity<Cart> addProductToCart(
             @PathVariable Long userId,
-            @RequestBody CartItem cartItem) {
-        CartItem addedCartItem = cartService.addProductToCart(userId, cartItem);
-        return ResponseEntity.ok(addedCartItem);
+            @RequestBody AddProductToCartDto addProductToCartDto) {
+        Cart addedCart = cartService.addProductToCart(userId, addProductToCartDto.getProductId(), addProductToCartDto.getQuantity());
+        return ResponseEntity.ok(addedCart);
     }
 
     // Update the quantity of a product in the cart
@@ -43,7 +44,7 @@ public class CartRestController {
 
     // Remove a product from the cart
     @DeleteMapping("/{userId}/remove/{productId}")
-    public ResponseEntity<Void> removeProductFromCart(
+    public ResponseEntity<Cart> removeProductFromCart(
             @PathVariable Long userId,
             @PathVariable Long productId) {
         cartService.removeProductFromCart(userId, productId);

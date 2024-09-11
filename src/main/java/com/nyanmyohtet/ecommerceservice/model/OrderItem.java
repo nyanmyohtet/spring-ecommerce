@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -24,6 +25,9 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
+    @Column(nullable = false)
     private int quantity;
-    private double price;
+
+    @Column(nullable = false)
+    private BigDecimal price;
 }

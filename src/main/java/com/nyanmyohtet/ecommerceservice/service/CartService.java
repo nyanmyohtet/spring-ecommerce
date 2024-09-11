@@ -5,8 +5,8 @@ import com.nyanmyohtet.ecommerceservice.model.CartItem;
 
 public interface CartService {
     Cart getCartByUserId(Long userId);
-    CartItem addProductToCart(Long userId, CartItem cartItem);
+    Cart addProductToCart(Long userId, Long productId, int quantity);
     CartItem updateProductInCart(Long userId, CartItem updatedCartItem);
-    void removeProductFromCart(Long userId, Long productId);
+    Cart removeProductFromCart(Long userId, Long productId);
     void clearCart(Long userId);
 }

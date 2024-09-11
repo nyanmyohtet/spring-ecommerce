@@ -31,16 +31,46 @@ public class CartServiceImpl implements CartService {
     }
 
     // Add a product to the cart
-    public CartItem addProductToCart(Long userId, CartItem cartItem) {
-        Cart cart = getOrCreateCart(userId); // Get or create the user's cart
+    public Cart addProductToCart(Long userId, Long productId, int quantity) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        Product product = productRepository.findById(cartItem.getProduct().getId())
+        Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        cartItem.setCart(cart);
-        cartItem.setProduct(product);
+        // Check if sufficient stock is available
+        if (product.getQuantityInStock() < quantity) {
+            throw new IllegalArgumentException("Insufficient stock available for product: " + product.getName());
+        }
 
-        return cartItemRepository.save(cartItem);
+        // Check if the user has an existing cart
+        Cart cart = user.getCart();
+        if (cart == null) {
+            cart = new Cart();
+            cart.setUser(user);
+            cart = cartRepository.save(cart);
+        }
+
+        // Check if the product is already in the cart
+        CartItem existingCartItem = cartItemRepository.findByCartAndProduct(cart, product);
+        if (existingCartItem != null) {
+            // If the product is already in the cart, update the quantity
+            existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
+            cartItemRepository.save(existingCartItem);
+        } else {
+            // If the product is not in the cart, create a new CartItem
+            CartItem cartItem = new CartItem();
+            cartItem.setCart(cart);
+            cartItem.setProduct(product);
+            cartItem.setQuantity(quantity);
+            cartItemRepository.save(cartItem);
+        }
+
+        // Decrease the product's quantityInStock
+        product.setQuantityInStock(product.getQuantityInStock() - quantity);
+        productRepository.save(product);
+
+        return cart;
     }
 
     // Update the quantity of a product in the cart
@@ -56,14 +86,36 @@ public class CartServiceImpl implements CartService {
     }
 
     // Remove a product from the cart
-    public void removeProductFromCart(Long userId, Long productId) {
-        Cart cart = cartRepository.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart not found for user id " + userId));
+    public Cart removeProductFromCart(Long userId, Long productId) {
+        // Get user by ID
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        CartItem cartItem = cartItemRepository.findByCartAndProductId(cart, productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found in cart"));
+        // Get product by ID
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
+        // Check if the user has an existing cart
+        Cart cart = user.getCart();
+        if (cart == null) {
+            throw new IllegalArgumentException("User has no active cart");
+        }
+
+        // Find the CartItem associated with the product
+        CartItem cartItem = cartItemRepository.findByCartAndProduct(cart, product);
+        if (cartItem == null) {
+            throw new ResourceNotFoundException("Product not found in the cart");
+        }
+
+        // Increase product quantityInStock by the quantity of the item being removed from the cart
+        int removedQuantity = cartItem.getQuantity();
+        product.setQuantityInStock(product.getQuantityInStock() + removedQuantity);
+        productRepository.save(product);
+
+        // Remove the CartItem from the cart
         cartItemRepository.delete(cartItem);
+
+        return cart;
     }
 
     // Clear the cart for a user
