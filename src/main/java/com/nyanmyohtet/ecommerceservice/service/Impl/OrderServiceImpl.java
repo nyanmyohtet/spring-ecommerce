@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,11 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> orderItems = createOrderItemsFromCart(cart, order);
         order.setOrderItems(orderItems);
 
-        // Save the order (cascade should automatically save the order items)
+        // Calculate the total price
+        BigDecimal totalPrice = calculateTotalPrice(orderItems);
+        order.setTotalPrice(totalPrice);
+
+        // Save the order
         order = orderRepository.save(order);
 
         cartItemRepository.deleteAllByCart(cart); // Clear the cart after order is placed
@@ -96,5 +101,11 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return orderItems;
+    }
+
+    private BigDecimal calculateTotalPrice(List<OrderItem> orderItems) {
+        return orderItems.stream()
+                .map(orderItem -> orderItem.getPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
