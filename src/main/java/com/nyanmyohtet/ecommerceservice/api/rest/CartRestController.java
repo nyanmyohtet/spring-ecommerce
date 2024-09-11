@@ -34,13 +34,6 @@ public class CartRestController {
     }
 
     // Update the quantity of a product in the cart
-    @PutMapping("/{userId}/update")
-    public ResponseEntity<CartItem> updateProductInCart(
-            @PathVariable Long userId,
-            @RequestBody CartItem updatedCartItem) {
-        CartItem cartItem = cartService.updateProductInCart(userId, updatedCartItem);
-        return ResponseEntity.ok(cartItem);
-    }
 
     // Remove a product from the cart
     @DeleteMapping("/{userId}/remove/{productId}")

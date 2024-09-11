@@ -1,4 +1,4 @@
-package com.nyanmyohtet.ecommerceservice.service.Impl;
+package com.nyanmyohtet.ecommerceservice.service.impl;
 
 import com.nyanmyohtet.ecommerceservice.api.rest.response.SearchProductResponse;
 import com.nyanmyohtet.ecommerceservice.exception.ResourceNotFoundException;
