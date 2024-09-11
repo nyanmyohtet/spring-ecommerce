@@ -19,6 +19,9 @@ ref: https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
 
 The ER diagram illustrates how entities like User, Product, Order, OrderItem, and Cart are related. Users can place multiple orders, and each order consists of items linked to products. The cart allows users to manage products before placing an order.
 
+![image](https://github.com/user-attachments/assets/1c4a845a-a264-4d58-9f3b-0570f4675993)
+
+
 ## Code Explanation:
 
 Controllers handle HTTP requests and map them to service methods.
