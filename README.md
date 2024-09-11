@@ -15,6 +15,23 @@ Oracle Database Express:21.3.0-xe
 
 ref: https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
 
+## ER Diagram Explanation:
+
+The ER diagram illustrates how entities like User, Product, Order, OrderItem, and Cart are related. Users can place multiple orders, and each order consists of items linked to products. The cart allows users to manage products before placing an order.
+
+## Code Explanation:
+
+Controllers handle HTTP requests and map them to service methods.
+Services contain business logic for user, product, and order management.
+Repositories interface with the Oracle database using Spring Data JPA.
+
+## How to Run the Project
+
+Clone the repository.
+Configure the database in application.properties.
+Run `mvn spring-boot:run` to start the application.
+Access the API documentation via Swagger at http://localhost:8080/swagger-ui/.
+
 ## Setup Oracle DB using Docker
 
 ```shell

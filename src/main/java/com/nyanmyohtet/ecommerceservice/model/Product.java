@@ -13,10 +13,9 @@ import java.util.Date;
 
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "products", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
-@Check(constraints = "category IN ('KID', 'WOMAN, 'MAN') AND status IN ('ENABLED', 'DISABLED')")
+@Check(constraints = "category IN ('KID', 'WOMAN', 'MAN') AND status IN ('ENABLED', 'DISABLED')")
 public class Product {
 
     @Id
@@ -25,28 +24,26 @@ public class Product {
     private Long id;
 
     private String name;
-
-    private String sku;
-
-    private Long price;
-
-    private Double weight;
+    private String description;
+    private Double price;
+    private Integer stock;
 
     @Column(length = 20)
     @Enumerated(EnumType.STRING)
     private ProductCategory category;
 
-    private Boolean taxable;
+    private String sku;
 
-    private String description;
+    private Double weight;
+
+
+    private Boolean taxable;
 
     @Column(length = 20)
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
 
     private Boolean visible;
-
-    private Integer quantity;
 
     @Column()
     private Date createdDate;

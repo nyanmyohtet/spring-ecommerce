@@ -1,6 +1,7 @@
 package com.nyanmyohtet.ecommerceservice.service.Impl;
 
 import com.nyanmyohtet.ecommerceservice.api.rest.response.SearchProductResponse;
+import com.nyanmyohtet.ecommerceservice.exception.ResourceNotFoundException;
 import com.nyanmyohtet.ecommerceservice.model.Product;
 import com.nyanmyohtet.ecommerceservice.repository.ProductRepository;
 import com.nyanmyohtet.ecommerceservice.service.ProductService;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -56,19 +56,42 @@ public class ProductServiceImpl implements ProductService {
         );
     }
 
+    // Retrieve a product by ID
     @Override
-    public Product getProductById(Long productId) {
-        Optional<Product> productOptional = productRepository.findById(productId);
-
-        if (productOptional.isEmpty()) {
-            // throw new ResourceNotFoundException("product not found");
-        }
-
-        return productOptional.get();
+    public Product getProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));
     }
 
+    // Create a new product
     @Override
     public Product createProduct(Product product) {
         return productRepository.save(product);
+    }
+
+    // Update an existing product
+    public Product updateProduct(Long id, Product updatedProduct) {
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));
+
+        existingProduct.setName(updatedProduct.getName());
+        existingProduct.setDescription(updatedProduct.getDescription());
+        existingProduct.setPrice(updatedProduct.getPrice());
+        existingProduct.setStock(updatedProduct.getStock());
+        existingProduct.setCategory(updatedProduct.getCategory());
+        existingProduct.setSku(updatedProduct.getSku());
+        existingProduct.setWeight(updatedProduct.getWeight());
+        existingProduct.setTaxable(updatedProduct.getTaxable());
+        existingProduct.setStatus(updatedProduct.getStatus());
+        existingProduct.setVisible(updatedProduct.getVisible());
+
+        return productRepository.save(existingProduct);
+    }
+
+    // Delete a product by ID
+    public void deleteProduct(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));
+        productRepository.delete(product);
     }
 }

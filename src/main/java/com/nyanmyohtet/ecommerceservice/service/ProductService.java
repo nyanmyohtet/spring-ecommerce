@@ -7,4 +7,6 @@ public interface ProductService {
     SearchProductResponse searchProduct(String productName, int pageNo, int pageSize, String sortBy, String sortDir);
     Product getProductById(Long studentId);
     Product createProduct(Product product);
+    Product updateProduct(Long id, Product updatedProduct);
+    void deleteProduct(Long id);
 }

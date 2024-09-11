@@ -24,6 +24,7 @@ public class ProductRestController {
 
     private final ProductService productService;
 
+    // Get all products
     @GetMapping
     public ResponseEntity<SearchProductResponse> getAllProduct(
             @RequestParam(value = "name", required = false) String name,
@@ -36,15 +37,33 @@ public class ProductRestController {
         return new ResponseEntity<>(allProducts, HttpStatus.OK);
     }
 
+    // Get a product by ID
     @GetMapping(path = "/{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable(name = "productId") Long productId) {
         Product product = productService.getProductById(productId);
         return ResponseEntity.ok(product);
     }
 
+    // Create a new product
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody @Valid Product productNew) {
         Product product = productService.createProduct(productNew);
         return new ResponseEntity<>(product, HttpStatus.CREATED);
+    }
+
+    // Update an existing product by ID
+    @PutMapping("/{productId}")
+    public ResponseEntity<Product> updateProduct(
+            @PathVariable(name = "productId") Long productId,
+            @RequestBody Product updatedProduct) {
+        Product product = productService.updateProduct(productId, updatedProduct);
+        return ResponseEntity.ok(product);
+    }
+
+    // Delete a product by ID
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable(name = "productId") Long productId) {
+        productService.deleteProduct(productId);
+        return ResponseEntity.noContent().build();
     }
 }
