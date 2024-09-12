@@ -2,6 +2,8 @@
 
 Spring Boot E-Commerce API with Oracle Database
 
+[![wakatime](https://wakatime.com/badge/user/232239bd-b752-4918-a368-ffb08deb9822/project/d420c842-a68b-470f-966a-4c10b1e71feb.svg)](https://wakatime.com/badge/user/232239bd-b752-4918-a368-ffb08deb9822/project/d420c842-a68b-470f-966a-4c10b1e71feb)
+
 ref: https://container-registry.oracle.com/ords/f?p=113:4:7017560529758:::4:P4_REPOSITORY,AI_REPOSITORY,AI_REPOSITORY_NAME,P4_REPOSITORY_NAME,P4_EULA_ID,P4_BUSINESS_AREA_ID:803,803,Oracle%20Database%20Express%20Edition,Oracle%20Database%20Express%20Edition,1,0&cs=34F4ZUpbk6kueA-wlN8oJ0ojpiff2eJ0iWh6Hupmx6ifnJ7ZHV64JzzNnz-PIRwHGJrIeeOGhs1KgUD0GO6iFSg
 
 ## Tech Stack
